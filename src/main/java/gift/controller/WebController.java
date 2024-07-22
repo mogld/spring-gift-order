@@ -41,10 +41,10 @@ public class WebController {
         return "register";
     }
 
-    @GetMapping("/login")
-    public String showLoginForm() {
-        return "login";
-    }
+   // @GetMapping("/login")
+   // public String showLoginForm() {
+    //    return "login";
+   // }
 
     @GetMapping("/user-wishes")
     public String showWishesPage() {

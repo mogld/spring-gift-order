@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Kakao Login Success</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1 class="mt-4">카카오 로그인 성공</h1>
+    <p id="token-info"></p>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const accessToken = /*[[${accessToken}]]*/ 'default_value';
+        localStorage.setItem('jwtToken', accessToken);
+        document.getElementById('token-info').innerText = 'Access Token: ' + accessToken;
+        alert('카카오 로그인 성공');
+        window.location.href = "/user-products";
+    });
+</script>
+</body>
+</html>
