@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Order</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1 class="mt-4">주문하기</h1>
+    <form id="orderForm">
+        <div class="form-group">
+            <label>Product Option:</label>
+            <select id="optionId" class="form-control" required>
+                <!-- Product options will be populated here -->
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Quantity:</label>
+            <input type="number" class="form-control" id="quantity" required/>
+        </div>
+        <div class="form-group">
+            <label>Message:</label>
+            <textarea class="form-control" id="message" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Order</button>
+    </form>
+    <div class="mt-4">
+        <a href="/user-products" class="btn btn-secondary">Back to Products</a>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const optionSelect = document.getElementById('optionId');
+        fetch('/api/products/options')
+            .then(response => response.json())
+            .then(options => {
+                options.forEach(option => {
+                    const optionElement = document.createElement('option');
+                    optionElement.value = option.id;
+                    optionElement.textContent = option.name;
+                    optionSelect.appendChild(optionElement);
+                });
+            });
+
+        document.getElementById('orderForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const optionId = document.getElementById('optionId').value;
+            const quantity = document.getElementById('quantity').value;
+            const message = document.getElementById('message').value;
+            const token = localStorage.getItem('jwtToken');
+
+            fetch('/api/orders', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    optionId: optionId,
+                    quantity: quantity,
+                    message: message
+                })
+            })
+                .then(response => response.json())
+                .then(order => {
+                    alert('Order placed successfully!');
+                    window.location.href = '/user-products';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to place order.');
+                });
+        });
+    });
+</script>
+</body>
+</html>

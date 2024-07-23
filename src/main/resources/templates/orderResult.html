@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Order Result</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1 class="mt-4">Order Result</h1>
+    <div id="orderResult"></div>
+    <div class="mt-4">
+        <a href="/user-products" class="btn btn-secondary">Back to Products</a>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const orderResult = JSON.parse(localStorage.getItem('orderResult'));
+        const orderResultDiv = document.getElementById('orderResult');
+        orderResultDiv.innerHTML = `
+            <p>Order ID: ${orderResult.id}</p>
+            <p>Option ID: ${orderResult.optionId}</p>
+            <p>Quantity: ${orderResult.quantity}</p>
+            <p>Order Date: ${orderResult.orderDateTime}</p>
+            <p>Message: ${orderResult.message}</p>
+        `;
+    });
+</script>
+</body>
+</html>

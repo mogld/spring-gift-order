@@ -23,6 +23,16 @@ public class ProductOption {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+    public ProductOption() {
+    }
+
+    public ProductOption(String name, int quantity, Product product) {
+        this.name = name;
+        this.quantity = quantity;
+        this.product = product;
+    }
+
+    // Getters and Setters
     public Long getId() {
         return id;
     }

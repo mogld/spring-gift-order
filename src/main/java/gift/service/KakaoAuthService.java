@@ -42,4 +42,21 @@ public class KakaoAuthService {
         }
     }
 
+    public void sendKakaoMessage(String accessToken, String message) {
+        var url = "https://kapi.kakao.com/v2/api/talk/memo/default/send";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(accessToken);
+
+        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+        body.add("template_object", message);
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<Map> response = restTemplate.exchange(URI.create(url), HttpMethod.POST, request, Map.class);
+
+        if (response.getStatusCode() != HttpStatus.OK) {
+            throw new RuntimeException("Failed to send Kakao message");
+        }
+    }
 }

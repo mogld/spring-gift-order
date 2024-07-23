@@ -41,6 +41,11 @@ public class WebController {
         return "register";
     }
 
+    @GetMapping("/order")
+    public String showOrderPage(Model model) {
+        return "order";
+    }
+
     // @GetMapping("/login")
     // public String showLoginForm() {
     //    return "login";
