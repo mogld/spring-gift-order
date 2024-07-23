@@ -20,6 +20,6 @@ public class KakaoLoginController {
         String accessToken = kakaoAuthService.getAccessToken(code);
         session.setAttribute("accessToken", accessToken);
         model.addAttribute("accessToken", accessToken);
-        return "redirect:/user-products";
+        return "KakaoSuccess";
     }
 }
