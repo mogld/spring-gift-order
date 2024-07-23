@@ -18,6 +18,9 @@
         </div>
         <button type="submit" class="btn btn-primary">Login</button>
     </form>
+    <div class="mt-4">
+        <a th:href="|https://kauth.kakao.com/oauth/authorize?scope=talk_message&response_type=code&redirect_uri=${redirectUrl}&client_id=${clientId}|" class="btn btn-warning">Login with Kakao</a>
+    </div>
 </div>
 
 <script>
