@@ -3,6 +3,7 @@ package gift.service;
 import gift.dto.WishResponse;
 import gift.model.Wish;
 import gift.repository.WishRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,4 +45,13 @@ public class WishService {
         wishResponse.setOptionName(wish.getProductOption().getName());
         return wishResponse;
     }
+
+    @Transactional
+    public void removeWishIfExists(Long memberId, Long productId, Long optionId) {
+        Wish wish = wishRepository.findByMemberIdAndProductIdAndProductOptionId(memberId, productId, optionId);
+        if (wish != null) {
+            wishRepository.delete(wish);
+        }
+    }
+
 }

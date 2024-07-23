@@ -17,9 +17,15 @@ public class KakaoLoginController {
 
     @GetMapping("/kakao/callback")
     public String kakaoCallback(@RequestParam String code, Model model, HttpSession session) {
-        String accessToken = kakaoAuthService.getAccessToken(code);
-        session.setAttribute("accessToken", accessToken);
-        model.addAttribute("accessToken", accessToken);
-        return "KakaoSuccess";
+        try {
+            String accessToken = kakaoAuthService.getAccessToken(code);
+            session.setAttribute("accessToken", accessToken);
+            model.addAttribute("accessToken", accessToken);
+            return "KakaoSuccess";
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("error", "Failed to login with Kakao. Please try again.");
+            return "error";
+        }
     }
 }

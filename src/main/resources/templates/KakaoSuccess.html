@@ -7,14 +7,15 @@
 <body>
 <div class="container">
     <h1 class="mt-4">카카오 로그인 성공</h1>
-    <p id="token-info">Access Token: <span th:text="${accessToken}"></span></p>
+    <p id="token-info">JWT Token: <span th:text="${jwtToken}"></span></p>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const accessToken = /*[[${accessToken}]]*/ 'default_value';
-        localStorage.setItem('jwtToken', accessToken);
-        document.getElementById('token-info').innerText = 'Access Token: ' + accessToken;
+        const jwtToken = /*[[${jwtToken}]]*/ 'default_value';
+        console.log("JWT Token: ", jwtToken);  // 디버깅용 로그 추가
+        localStorage.setItem('jwtToken', jwtToken);
+        document.getElementById('token-info').innerText = 'JWT Token: ' + jwtToken;
         alert('카카오 로그인 성공');
         window.location.href = "/user-products";
     });

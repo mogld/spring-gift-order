@@ -1,7 +1,6 @@
 package gift.model;
 
 import jakarta.persistence.*;
-
 import java.util.List;
 
 @Entity
@@ -19,11 +18,16 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Wish> wishes;
 
-    public Member() {
-    }
+    @Column(name = "kakao_access_token")
+    private String kakaoAccessToken;
 
+    // Getters and Setters
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getEmail() {
@@ -48,5 +52,13 @@ public class Member {
 
     public void setWishes(List<Wish> wishes) {
         this.wishes = wishes;
+    }
+
+    public String getKakaoAccessToken() {
+        return kakaoAccessToken;
+    }
+
+    public void setKakaoAccessToken(String kakaoAccessToken) {
+        this.kakaoAccessToken = kakaoAccessToken;
     }
 }

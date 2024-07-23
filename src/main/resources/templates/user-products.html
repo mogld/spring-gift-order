@@ -68,6 +68,7 @@
                 </td>
                 <td>
                     <button class="btn btn-primary btn-sm" th:attr="onclick='addToWishList(' + ${product.id} + ')'">Add to Wish List</button>
+                    <button class="btn btn-success btn-sm" th:attr="onclick='placeOrder(' + ${product.id} + ')'">Order Now</button>
                 </td>
             </tr>
             </tbody>
@@ -94,8 +95,14 @@
 </div>
 
 <script>
+
     function addToWishList(productId) {
         const token = localStorage.getItem('jwtToken');
+        if (!token) {
+            alert('JWT 토큰이 없습니다. 로그인 해주세요.');
+            return;
+        }
+
         const selectedOptionId = document.getElementById(`optionDropdown_${productId}`).value;
 
         fetch('/wishes', {
@@ -104,7 +111,7 @@
                 'Authorization': 'Bearer ' + token,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ productId: productId, optionId: selectedOptionId }) // Using WishRequest format
+            body: JSON.stringify({ productId: productId, optionId: selectedOptionId })
         })
             .then(response => {
                 if (response.ok) {
@@ -119,6 +126,49 @@
                 console.error('Error:', error);
             });
     }
+
+
+    function placeOrder(productId) {
+        const token = localStorage.getItem('jwtToken');
+        if (!token) {
+            alert('You must be logged in to place an order');
+            return;
+        }
+
+        const selectedOptionId = document.getElementById(`optionDropdown_${productId}`).value;
+        const quantity = parseInt(prompt("Enter the quantity:"), 10);
+        const message = prompt("Enter a message:");
+
+        if (isNaN(quantity) || quantity <= 0) {
+            alert("Invalid quantity");
+            return;
+        }
+
+        console.log("Sending token: ", token);  // 디버깅용 로그 추가
+
+        fetch('/api/orders', {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ optionId: selectedOptionId, quantity: quantity, message: message })
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('Order placed successfully!');
+                    location.reload();
+                } else {
+                    response.text().then(text => {
+                        alert('Error: ' + text);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
 </script>
 </body>
 </html>

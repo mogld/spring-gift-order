@@ -42,3 +42,14 @@ CREATE TABLE wish (
                       FOREIGN KEY (product_id) REFERENCES product(id)
 
 );
+
+CREATE TABLE orders (
+                         id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                         member_id BIGINT NOT NULL,
+                         product_option_id BIGINT NOT NULL,
+                         quantity INT NOT NULL,
+                         order_date_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                         message VARCHAR(255),
+                         FOREIGN KEY (member_id) REFERENCES member(id),
+                         FOREIGN KEY (product_option_id) REFERENCES product_option(id)
+);

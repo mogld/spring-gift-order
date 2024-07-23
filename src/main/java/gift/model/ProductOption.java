@@ -23,6 +23,7 @@ public class ProductOption {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -55,9 +56,8 @@ public class ProductOption {
         this.product = product;
     }
 
-    // 수량 차감
     public void subtractQuantity(int quantityToSubtract) {
-        if (this.quantity <= quantityToSubtract) {
+        if (this.quantity < quantityToSubtract) {
             throw new IllegalArgumentException("수량이 부족합니다.");
         }
         this.quantity -= quantityToSubtract;
