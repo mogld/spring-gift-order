@@ -44,4 +44,11 @@ public class WishService {
         wishResponse.setOptionName(wish.getProductOption().getName());
         return wishResponse;
     }
+
+    public void deleteWishByProductOptionIdAndMemberId(Long optionId, Long memberId) {
+        Wish wish = wishRepository.findByProductOptionIdAndMemberId(optionId, memberId);
+        if (wish != null) {
+            wishRepository.delete(wish);
+        }
+    }
 }
