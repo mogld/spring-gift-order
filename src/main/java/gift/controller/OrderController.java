@@ -1,9 +1,7 @@
-
 package gift.controller;
 
 import gift.annotation.LoginMember;
 import gift.dto.OrderRequest;
-import gift.dto.OrderResponse;
 import gift.model.Member;
 import gift.model.Order;
 import gift.service.OrderService;
@@ -20,9 +18,6 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<OrderResponse> createOrder(@RequestBody OrderRequest orderRequest, @LoginMember Member member) {
         Order order = orderService.createOrder(orderRequest.getOptionId(), orderRequest.getQuantity(), orderRequest.getMessage(), member);
-        OrderResponse response = new OrderResponse(order);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }
