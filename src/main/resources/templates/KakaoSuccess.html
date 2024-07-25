@@ -48,15 +48,37 @@
     <div class="token">
         <strong>JWT Token:</strong> <span id="jwtToken" th:text="${jwtToken}"></span>
     </div>
-    <a href="/user-products" class="btn" id="goToProductsBtn">상품 목록 보러가기</a>
+    <button class="btn" id="goToProductsBtn">상품 목록 보러가기</button>
 </div>
 <script>
-    const jwtToken = /*[[${jwtToken}]]*/ 'default_token';
-
-    localStorage.setItem('jwtToken', jwtToken);
+    document.addEventListener('DOMContentLoaded', function() {
+        const jwtTokenElement = document.getElementById('jwtToken');
+        const jwtToken = jwtTokenElement.textContent || jwtTokenElement.innerText;
+        localStorage.setItem('jwtToken', jwtToken);
+    });
 
     document.getElementById('goToProductsBtn').addEventListener('click', function() {
-        localStorage.setItem('jwtToken', jwtToken);
+        const jwtToken = localStorage.getItem('jwtToken');
+        if (jwtToken) {
+            fetch('/user-products', {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + jwtToken
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = "/user-products";
+                    } else {
+                        throw new Error('Failed to load products');
+                    }
+                })
+                .catch(error => {
+                    alert(error.message);
+                });
+        } else {
+            alert('JWT Token not found');
+        }
     });
 </script>
 </body>
