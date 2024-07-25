@@ -1,4 +1,3 @@
-
 package gift.service;
 
 import gift.model.Member;
@@ -9,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import jakarta.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 
 @Service
@@ -22,6 +22,12 @@ public class OrderService {
 
     @Autowired
     private WishService wishService;
+
+    @Autowired
+    private KakaoMessageService kakaoMessageService;
+
+    @Autowired
+    private HttpSession session;
 
     @Transactional
     public Order createOrder(Long optionId, int quantity, String message, Member member) {
@@ -41,6 +47,20 @@ public class OrderService {
 
         wishService.deleteWishByProductOptionIdAndMemberId(optionId, member.getId());
 
-        return orderRepository.save(order);
+        Order savedOrder = orderRepository.save(order);
+
+        String accessToken = (String) session.getAttribute("accessToken");
+        if (accessToken != null) {
+            kakaoMessageService.sendMessage(accessToken, createKakaoMessage(order));
+        } else {
+            System.out.println("No access token available for Kakao message");
+        }
+
+        return savedOrder;
+    }
+
+    private String createKakaoMessage(Order order) {
+        return String.format("{\"object_type\":\"text\",\"text\":\"order: %d of %s\",\"link\":{\"web_url\":\"http://localhost:8080/user-products\"}}",
+                order.getQuantity(), order.getProductOption().getName());
     }
 }
