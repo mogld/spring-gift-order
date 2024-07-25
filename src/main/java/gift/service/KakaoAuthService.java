@@ -19,22 +19,23 @@ public class KakaoAuthService {
     @Value("${kakao.redirect-uri}")
     private String redirectUri;
 
-    public String getAccessToken(String authorizationCode) {
-        var url = "https://kauth.kakao.com/oauth/token";
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+    @Value("${kakao.token-url}")
+    private String tokenUrl;
 
-        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("grant_type", "authorization_code");
-        body.add("client_id", clientId);
-        body.add("redirect_uri", redirectUri);
-        body.add("code", authorizationCode);
+    private final RestTemplate restTemplate;
+
+    public KakaoAuthService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
+    public String getAccessToken(String authorizationCode) {
+        HttpHeaders headers = createHeaders();
+        MultiValueMap<String, String> body = createRequestBody(authorizationCode);
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Map> response = restTemplate.exchange(URI.create(url), HttpMethod.POST, request, Map.class);
+        ResponseEntity<Map> response = restTemplate.exchange(URI.create(tokenUrl), HttpMethod.POST, request, Map.class);
 
-        if (response.getStatusCode() == HttpStatus.OK) {
+        if (response.getStatusCode().is2xxSuccessful()) {
             Map<String, Object> responseBody = response.getBody();
             return (String) responseBody.get("access_token");
         } else {
@@ -42,4 +43,18 @@ public class KakaoAuthService {
         }
     }
 
+    private HttpHeaders createHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        return headers;
+    }
+
+    private MultiValueMap<String, String> createRequestBody(String authorizationCode) {
+        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+        body.add("grant_type", "authorization_code");
+        body.add("client_id", clientId);
+        body.add("redirect_uri", redirectUri);
+        body.add("code", authorizationCode);
+        return body;
+    }
 }

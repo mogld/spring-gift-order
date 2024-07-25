@@ -1,22 +1,65 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Kakao Login Success</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <title>카카오 로그인 성공</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            text-align: center;
+            padding: 50px;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+        }
+        .success-message {
+            font-size: 24px;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+        .token {
+            font-size: 16px;
+            color: #333;
+            word-break: break-all;
+        }
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #FFEB00;
+            color: #333;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .btn:hover {
+            background-color: #FFD700;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
-    <h1 class="mt-4">카카오 로그인 성공</h1>
-    <p id="token-info">Access Token: <span th:text="${accessToken}"></span></p>
+    <div class="success-message">카카오 로그인에 성공하였습니다!</div>
+    <div class="token">
+        <strong>Access Token:</strong> <span id="accessToken" th:text="${accessToken}"></span>
+    </div>
+    <a href="/user-products" class="btn" id="goToProductsBtn">상품 목록 보러가기</a>
 </div>
-
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const accessToken = /*[[${accessToken}]]*/ 'default_value';
+
+    const accessToken = /*[[${accessToken}]]*/ 'default_token';
+
+
+    localStorage.setItem('jwtToken', accessToken);
+
+
+    document.getElementById('goToProductsBtn').addEventListener('click', function() {
         localStorage.setItem('jwtToken', accessToken);
-        document.getElementById('token-info').innerText = 'Access Token: ' + accessToken;
-        alert('카카오 로그인 성공');
-        window.location.href = "/user-products";
     });
 </script>
 </body>

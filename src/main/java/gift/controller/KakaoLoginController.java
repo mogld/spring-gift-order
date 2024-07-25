@@ -15,11 +15,17 @@ public class KakaoLoginController {
     @Autowired
     private KakaoAuthService kakaoAuthService;
 
+    private static String accessToken;
+
     @GetMapping("/kakao/callback")
     public String kakaoCallback(@RequestParam String code, Model model, HttpSession session) {
-        String accessToken = kakaoAuthService.getAccessToken(code);
+        accessToken = kakaoAuthService.getAccessToken(code);
         session.setAttribute("accessToken", accessToken);
         model.addAttribute("accessToken", accessToken);
         return "KakaoSuccess";
+    }
+
+    public static String getAccessToken() {
+        return accessToken;
     }
 }
