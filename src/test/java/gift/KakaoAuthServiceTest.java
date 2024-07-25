@@ -45,7 +45,7 @@ public class KakaoAuthServiceTest {
     @Test
     void testKakaoLoginRedirect() {
 
-        var url = "https://kauth.kakao.com/oauth/authorize?scope=talk_message&response_type=code&client_id=" + clientId + "&redirect_uri=" + redirectUri;
+        var url = "https://kauth.kakao.com/oauth/authorize?scope=talk_message,account_email&response_type=code&client_id=" + clientId + "&redirect_uri=" + redirectUri;
 
 
         ResponseEntity<String> mockResponse = new ResponseEntity<>(HttpStatus.FOUND);
