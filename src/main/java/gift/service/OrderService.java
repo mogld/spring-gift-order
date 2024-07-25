@@ -60,7 +60,7 @@ public class OrderService {
     }
 
     private String createKakaoMessage(Order order) {
-        return String.format("{\"object_type\":\"text\",\"text\":\"Order placed: %d of %s\",\"link\":{\"web_url\":\"http://localhost:8080/user-products\"}}",
+        return String.format("{\"object_type\":\"text\",\"text\":\"order: %d of %s\",\"link\":{\"web_url\":\"http://localhost:8080/user-products\"}}",
                 order.getQuantity(), order.getProductOption().getName());
     }
 }

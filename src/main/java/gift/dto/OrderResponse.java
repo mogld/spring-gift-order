@@ -19,7 +19,6 @@ public class OrderResponse {
         this.orderDateTime = order.getOrderDateTime();
     }
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }
