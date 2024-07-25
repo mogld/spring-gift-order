@@ -22,6 +22,9 @@ public class KakaoAuthService {
     @Value("${kakao.token-url}")
     private String tokenUrl;
 
+    @Value("${kakao.user-info-url}")
+    private String userInfoUrl;
+
     private final RestTemplate restTemplate;
 
     public KakaoAuthService(RestTemplate restTemplate) {
@@ -56,5 +59,20 @@ public class KakaoAuthService {
         body.add("redirect_uri", redirectUri);
         body.add("code", authorizationCode);
         return body;
+    }
+
+    public String getUserEmail(String accessToken) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + accessToken);
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+
+        ResponseEntity<Map> response = restTemplate.exchange(URI.create(userInfoUrl), HttpMethod.GET, entity, Map.class);
+        if (response.getStatusCode().is2xxSuccessful()) {
+            Map<String, Object> responseBody = response.getBody();
+            Map<String, Object> kakaoAccount = (Map<String, Object>) responseBody.get("kakao_account");
+            return (String) kakaoAccount.get("email");
+        } else {
+            throw new RuntimeException("Failed to get user email");
+        }
     }
 }

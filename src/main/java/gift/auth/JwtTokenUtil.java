@@ -16,16 +16,19 @@ public class JwtTokenUtil {
 
     public static String generateToken(Member member) {
         Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
-        return Jwts.builder()
+        String token = Jwts.builder()
                 .setSubject(member.getId().toString())
                 .claim("email", member.getEmail())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(key)
                 .compact();
+        System.out.println("Generated Token: " + token); // 디버깅 로그
+        return token;
     }
 
     public static Claims getClaims(String token) {
+        System.out.println("Parsing Token: " + token); // 디버깅 로그
         return Jwts.parserBuilder()
                 .setSigningKey(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))
                 .build()

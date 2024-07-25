@@ -46,20 +46,17 @@
 <div class="container">
     <div class="success-message">카카오 로그인에 성공하였습니다!</div>
     <div class="token">
-        <strong>Access Token:</strong> <span id="accessToken" th:text="${accessToken}"></span>
+        <strong>JWT Token:</strong> <span id="jwtToken" th:text="${jwtToken}"></span>
     </div>
     <a href="/user-products" class="btn" id="goToProductsBtn">상품 목록 보러가기</a>
 </div>
 <script>
+    const jwtToken = /*[[${jwtToken}]]*/ 'default_token';
 
-    const accessToken = /*[[${accessToken}]]*/ 'default_token';
-
-
-    localStorage.setItem('jwtToken', accessToken);
-
+    localStorage.setItem('jwtToken', jwtToken);
 
     document.getElementById('goToProductsBtn').addEventListener('click', function() {
-        localStorage.setItem('jwtToken', accessToken);
+        localStorage.setItem('jwtToken', jwtToken);
     });
 </script>
 </body>
