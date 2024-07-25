@@ -1,5 +1,7 @@
 package gift.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ public class KakaoMessageService {
     private String adminKey;
 
     private final RestTemplate restTemplate;
+    private static final Logger logger = LoggerFactory.getLogger(KakaoMessageService.class);
 
     public KakaoMessageService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -30,8 +33,10 @@ public class KakaoMessageService {
 
         ResponseEntity<String> response = restTemplate.postForEntity(apiUrl, request, String.class);
 
-        if (!response.getStatusCode().is2xxSuccessful()) {
-            throw new RuntimeException("Failed to send message");
+        if (response.getStatusCode().is2xxSuccessful()) {
+            logger.info("Message sent successfully: " + response.getBody());
+        } else {
+            logger.error("Failed to send message: " + response.getStatusCode() + " - " + response.getBody());
         }
     }
 

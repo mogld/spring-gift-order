@@ -49,12 +49,10 @@ public class OrderService {
 
         Order savedOrder = orderRepository.save(order);
 
-
         String accessToken = (String) session.getAttribute("accessToken");
         if (accessToken != null) {
             kakaoMessageService.sendMessage(accessToken, createKakaoMessage(order));
         } else {
-
             System.out.println("No access token available for Kakao message");
         }
 
@@ -66,3 +64,4 @@ public class OrderService {
                 order.getQuantity(), order.getProductOption().getName());
     }
 }
+
