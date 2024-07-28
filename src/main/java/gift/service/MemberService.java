@@ -24,10 +24,19 @@ public class MemberService {
         if (memberRepository.findByEmail(email) != null) {
             throw new IllegalArgumentException("Email already exists");
         }
-        String encodedPassword = passwordEncoder.encode(password);
+        String encodedPassword = password.isEmpty() ? "" : passwordEncoder.encode(password);
         Member member = new Member();
         member.setEmail(email);
         member.setPassword(encodedPassword);
+        return memberRepository.save(member);
+    }
+
+    @Transactional
+    public Member register(Member member) {
+        if (memberRepository.findByEmail(member.getEmail()) != null) {
+            throw new IllegalArgumentException("Email already exists");
+        }
+        member.setPassword(passwordEncoder.encode(member.getPassword()));
         return memberRepository.save(member);
     }
 
@@ -38,6 +47,11 @@ public class MemberService {
             return member;
         }
         return null;
+    }
+
+    @Transactional(readOnly = true)
+    public Member findByEmail(String email) {
+        return memberRepository.findByEmail(email);
     }
 
     @Transactional(readOnly = true)

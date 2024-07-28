@@ -68,6 +68,7 @@
                 </td>
                 <td>
                     <button class="btn btn-primary btn-sm" th:attr="onclick='addToWishList(' + ${product.id} + ')'">Add to Wish List</button>
+                    <a th:href="@{/order(optionId=${product.id})}" class="btn btn-success btn-sm mt-1">Order</a> <!-- 주문하기 버튼 추가 -->
                 </td>
             </tr>
             </tbody>
@@ -104,7 +105,7 @@
                 'Authorization': 'Bearer ' + token,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ productId: productId, optionId: selectedOptionId }) // Using WishRequest format
+            body: JSON.stringify({ productId: productId, optionId: selectedOptionId })
         })
             .then(response => {
                 if (response.ok) {

@@ -41,6 +41,12 @@ public class WebController {
         return "register";
     }
 
+    @GetMapping("/order")
+    public String showOrderForm(@RequestParam(name = "optionId", required = false) Long optionId, Model model) {
+        model.addAttribute("optionId", optionId);
+        return "order";
+    }
+
     // @GetMapping("/login")
     // public String showLoginForm() {
     //    return "login";
